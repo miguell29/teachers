@@ -11,7 +11,7 @@
             <input type="text" name="materias" id="materias" v-model="materia"> <button @click="handleMaterias">Agregar Materia</button>
             <h4>materias agregadas:</h4>
             <ul>
-                <li v-for="(item, index) in teacher.materias" :key="index">{{ item }}</li>
+                <li v-for="(item, index) in teacher.materias" :key="index">{{ item }} <button @click="deleteMateria(index)">Elminar</button></li>
             </ul>
             <input type="checkbox" v-model="teacher.Documentacion">Documentacion Entregada
             <button @click="handleTeachers">Agregar Profesor</button>
@@ -26,20 +26,24 @@
                     <th>Dni</th>
                     <th>Materias</th>
                     <th>Documentacion</th>
+                    <th>Eliminar</th>
+                    <td>Editar</td>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(item, index) in teachers" :key="index">
+                <tr v-for="(item, index) in teachers" :key="item.dni">
                     <td>{{ item.teacherName }}</td>
                     <td>{{ item.surname }}</td>
                     <td>{{ item.dni }}</td>
                     <td>
                         <ul>
-                            <li v-for="(materia, index) in item.materias" :key="index">{{ materia }}</li>
+                            <li v-for="(materia, index) in item.materias" :key="index">{{ materia }}</li>   
                         </ul>
                     </td>
                     <td v-if="item.Documentacion">Entregado</td>
                     <td v-else >No entregado</td>
+                    <td><button @click="deleteTeacher(index)">Eliminar</button></td>
+                    <td><button @click="editTeacher(index)">Editar</button></td>
                 </tr>
             </tbody>
         </table>
@@ -50,7 +54,7 @@
     import {Ref,ref} from 'vue';
      
     interface Iteacher{
-        teacherName : string,
+        teacherName : string,                       
         surname : string,
         dni : string,
         materias : Array<string>,
@@ -80,6 +84,17 @@
             materias : [],
             Documentacion : false
         }
+    }
+
+    const deleteMateria = (indice: number): void => {
+        teacher.value.materias.splice(indice, 1);
+    }
+    const deleteTeacher = (indice:number):void=>{
+        teachers.value.splice(indice,1);
+    }
+    const editTeacher = (indice:number):void=>{
+        teacher.value = teachers.value[indice];
+        teachers.value.splice(indice,1);
     }
 </script>
 
