@@ -1,33 +1,46 @@
 <template>
-    <section>
+    <section class="container mt-3">
         <h3>Añadir profesor</h3>
-            <label for="name">Nombre</label>
-            <input type="text" name="name" id="name" v-model="teacher.teacherName">
-            <label for="surname">Apellidos</label>
-            <input type="text" name="surname" id="surname" v-model="teacher.surname">
-            <label for="dni">Dni</label>
-            <input type="text" name="dni" id="dni" v-model="teacher.dni">
-            <label for="materias">Materias</label> 
-            <input type="text" name="materias" id="materias" v-model="materia"> <button @click="handleMaterias">Agregar Materia</button>
-            <h4>materias agregadas:</h4>
-            <ul>
-                <li v-for="(item, index) in teacher.materias" :key="index">{{ item }} <button @click="deleteMateria(index)">Elminar</button></li>
+        <section class="m-5">
+            <div>
+                <label class="form-label" for="name">Nombre</label>
+                <input class="form-control" type="text" name="name" id="name" v-model="teacher.teacherName">
+            </div>
+            <div>
+                <label class="form-label" for="surname">Apellidos</label>
+            <input class="form-control" type="text" name="surname" id="surname" v-model="teacher.surname">
+            </div>
+            <div>
+                <label class="form-label" for="dni">Dni</label>
+                <input class="form-control" type="text" name="dni" id="dni" v-model="teacher.dni">
+            </div>
+            <div>
+                <label class="form-label" for="materias">Materias</label> 
+                <input class="form-control mb-3" type="text" name="materias" id="materias" v-model="materia"> <button @click="handleMaterias" class="btn btn-info mb-3">Agregar Materia</button>
+            </div>
+            <h4 v-if="teacher.materias.length > 0">materias agregadas:</h4>
+            <ul class="list-group">
+                <li class="list-group-item" v-for="(item, index) in teacher.materias" :key="index">{{ item }} <button @click="deleteMateria(index)" class="btn btn-secondary">Elminar</button></li>
             </ul>
-            <input type="checkbox" v-model="teacher.Documentacion">Documentacion Entregada
-            <button @click="handleTeachers">Agregar Profesor</button>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" v-model="teacher.Documentacion" id="doc">
+                <label class="form-check-label" for="doc">Documentacion Entregada</label>
+            </div>
+            <button @click="handleTeachers" class="btn btn-success mt-3">Agregar Profesor</button>
+        </section>
     </section>
-    <section>
-        <h3>Listado de Profesores</h3>
-        <table v-if="teachers">
+    <section class="container mt-5">
+        <h3 class="mb-5">Listado de Profesores</h3>
+        <table v-if="teachers" class="table text-center">
             <thead>
                 <tr>
-                    <th>Nombre</th>
-                    <th>Apellidos</th>
-                    <th>Dni</th>
-                    <th>Materias</th>
-                    <th>Documentacion</th>
-                    <th>Eliminar</th>
-                    <td>Editar</td>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Apellidos</th>
+                    <th scope="col">Dni</th>
+                    <th scope="col">Materias</th>
+                    <th scope="col">Documentacion</th>
+                    <th scope="col">Editar</th>
+                    <th scope="col">Eliminar</th>
                 </tr>
             </thead>
             <tbody>
@@ -36,14 +49,16 @@
                     <td>{{ item.surname }}</td>
                     <td>{{ item.dni }}</td>
                     <td>
-                        <ul>
-                            <li v-for="(materia, index) in item.materias" :key="index">{{ materia }}</li>   
+                        <ul class="list-group">
+                            <template  v-for="(materia, index) in item.materias" :key="index">
+                                <li class="list-group-item">{{ materia }}</li>
+                            </template>   
                         </ul>
                     </td>
                     <td v-if="item.Documentacion">Entregado</td>
                     <td v-else >No entregado</td>
-                    <td><button @click="deleteTeacher(index)">Eliminar</button></td>
-                    <td><button @click="editTeacher(index)">Editar</button></td>
+                    <td><button @click="editTeacher(index)" class="btn btn-warning">Editar</button></td>
+                    <td><button @click="deleteTeacher(index)" class="btn btn-danger">Eliminar</button></td>
                 </tr>
             </tbody>
         </table>
