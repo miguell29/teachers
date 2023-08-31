@@ -1,37 +1,44 @@
 <template>
-    <section class="container mt-3">
+    <div class="p-3" :class="{'text-bg-dark bg-gradient':darkMode}">
+        <section class="container">
+        <div class="mode fixed-top p-5">
+            <button @click="handleMode" class="bg-transparent h4" :class="{'text-light':darkMode}">
+                <i v-if="darkMode" class="bi bi-moon-stars-fill"></i>
+                <i v-else class="bi bi-brightness-high-fill"></i>
+            </button>
+        </div>
         <h3>Añadir profesor</h3>
         <section class="m-5">
             <div>
                 <label class="form-label" for="name">Nombre</label>
-                <input class="form-control" type="text" name="name" id="name" v-model="teacher.teacherName">
+                <input class="form-control" type="text" required name="name" id="name" v-model="teacher.teacherName" :class="{'text-danger border-bottom border-danger bg-transparent':darkMode}">
             </div>
             <div>
                 <label class="form-label" for="surname">Apellidos</label>
-            <input class="form-control" type="text" name="surname" id="surname" v-model="teacher.surname">
+            <input class="form-control" type="text" required name="surname" id="surname" v-model="teacher.surname" :class="{'text-danger border-bottom border-danger bg-transparent':darkMode}">
             </div>
             <div>
                 <label class="form-label" for="dni">Dni</label>
-                <input class="form-control" type="text" name="dni" id="dni" v-model="teacher.dni">
+                <input class="form-control" type="text" required name="dni" id="dni" v-model="teacher.dni" :class="{'text-danger border-bottom border-danger bg-transparent':darkMode}">
             </div>
             <div>
                 <label class="form-label" for="materias">Materias</label> 
-                <input class="form-control mb-3" type="text" name="materias" id="materias" v-model="materia"> <button @click="handleMaterias" class="btn btn-info mb-3">Agregar Materia</button>
+                <input class="form-control mb-3" type="text" required name="materias" id="materias" v-model="materia" :class="{'text-danger border-bottom border-danger bg-transparent':darkMode}"> <button @click="handleMaterias" class="btn mb-3" :class="{'btn-outline-info':darkMode,'btn-info':!darkMode}"> <i class="bi bi-plus-circle"></i> Agregar Materia</button>
             </div>
             <h4 v-if="teacher.materias.length > 0">materias agregadas:</h4>
             <ul class="list-group">
-                <li class="list-group-item" v-for="(item, index) in teacher.materias" :key="index">{{ item }} <button @click="deleteMateria(index)" class="btn btn-secondary">Elminar</button></li>
+                <li class="list-group-item" :class="{'list-group-item-action list-group-item-dark':darkMode}" v-for="(item, index) in teacher.materias" :key="index">{{ item }} <button @click="deleteMateria(index)" class="btn btn-secondary">Elminar</button></li>
             </ul>
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" v-model="teacher.Documentacion" id="doc">
                 <label class="form-check-label" for="doc">Documentacion Entregada</label>
             </div>
-            <button @click="handleTeachers" class="btn btn-success mt-3">Agregar Profesor</button>
+            <button @click="handleTeachers" class="btn mt-3" :class="{'btn btn-outline-success':darkMode,'btn-success':!darkMode}"> <i class="bi bi-plus-circle"></i> Agregar Profesor</button>
         </section>
     </section>
     <section class="container mt-5">
         <h3 class="mb-5">Listado de Profesores</h3>
-        <table v-if="teachers" class="table text-center">
+        <table v-if="teachers" class="table table-hover text-center" :class="{'table-dark':darkMode}">
             <thead>
                 <tr>
                     <th scope="col">Nombre</th>
@@ -51,18 +58,20 @@
                     <td>
                         <ul class="list-group">
                             <template  v-for="(materia, index) in item.materias" :key="index">
-                                <li class="list-group-item">{{ materia }}</li>
+                                <li class="list-group-item" :class="{'list-group-item-action list-group-item-dark':darkMode}">{{ materia }}</li>
                             </template>   
                         </ul>
                     </td>
                     <td v-if="item.Documentacion">Entregado</td>
                     <td v-else >No entregado</td>
-                    <td><button @click="editTeacher(index)" class="btn btn-warning">Editar</button></td>
-                    <td><button @click="deleteTeacher(index)" class="btn btn-danger">Eliminar</button></td>
+                    <td><button @click="editTeacher(index)" class="btn" :class="{'btn btn-outline-warning':darkMode,'btn-warning':!darkMode}"><i class="bi bi-pencil"></i></button></td>
+                    <td><button @click="deleteTeacher(index)" class="btn" :class="{'btn btn-outline-danger':darkMode,'btn-danger':!darkMode}"><i class="bi bi-x-circle"></i></button></td>
                 </tr>
             </tbody>
         </table>
     </section>
+    </div>
+    
 </template>
 
 <script lang="ts" setup>
@@ -85,6 +94,8 @@
 
     let teachers:Ref<Array<Iteacher>> = ref([]);
     let materia:Ref<string> = ref('');
+    let darkMode:Ref<boolean> =ref(false);
+
 
     const handleMaterias = ():void=>{
         teacher.value.materias.push(materia.value);
@@ -111,8 +122,17 @@
         teacher.value = teachers.value[indice];
         teachers.value.splice(indice,1);
     }
+    const handleMode = ():void =>{
+        darkMode.value = !darkMode.value
+    }
 </script>
 
 <style scope>
-
+.mode{
+    display: flex;
+    justify-content: flex-end;
+}
+div{
+    margin: 0;
+}
 </style>
